@@ -1,37 +1,38 @@
 <html>
 <head>
-	<script src="./js/jquery-1.9.1.min.js"></script>
-	<script src="./js/rm-rotator.js"></script>
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<script src="js/rm-rotator.js"></script>
 	<script>
 		$(function() {
 			$('#rm-rotator').Rotator({
 				count: 60,
 				start: 0,
-				prefix: './demo_images/violet/img_0_0_',
-				postfix: '.jpg'
+				prefix: 'demo_images/violet/img_0_0_',
+				postfix: '.jpg',
+				height: '100px'
 			});
 
 			$('#rm-rotator2').Rotator({
 				count: 60,
 				start: 30,
-				prefix: './demo_images/violet/img_0_0_',
+				prefix: 'demo_images/violet/img_0_0_',
 				postfix: '.jpg'
 			});
 		})
 	</script>
 	<style>
 		.rotators, .rotators img {
-			height: 300px;
+			
 		}
 	</style>
 </head>
 <body>
 	<div id="rm-rotator" class="rotators">
-		<img src="./demo_images/violet/img_0_0_0.jpg">
+		<img src="demo_images/violet/img_0_0_0.jpg">
 	</div>
 
 	<div id="rm-rotator2" class="rotators">
-		<img src="./demo_images/violet/img_0_0_0.jpg">
+		<img src="demo_images/violet/img_0_0_0.jpg">
 	</div>
 </body>
 </html>

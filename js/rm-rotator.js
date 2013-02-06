@@ -8,6 +8,8 @@
 
 	var defaults = {
 		// add_zeros: 'false' // Add leading zeros if filename like 01, 02, ...
+		// width: '300px'
+		// height: '500px'
 	}
 
 
@@ -36,6 +38,27 @@
 						'z-index': 5
 					});
 
+		if (this.options.width) {
+			this.container.css('width', this.options.width);
+			this.img.css('width', this.options.width);
+		}
+
+		if (this.options.height) {
+			this.container.css('height', this.options.height);
+			this.img.css('height', this.options.height);
+		}
+
+		// Auto set size to block after load first image
+		if (!this.options.width || !this.options.height) {
+			this.img.on('load', function() {
+				var width = this_.img.width();
+				var height = this_.img.height();
+				this_.container.css({
+								width: width,
+								height: height
+					});
+			});
+		}
 
 		this.img.attr('src', this.options.prefix + this.options.start + this.options.postfix)
 
@@ -106,6 +129,9 @@
 	
 	// Preload images
 	Rotator.prototype.preloader = function() {
+
+		// TODO Show loader
+
 		imageObj = new Image();
 		images = new Array();
 		for (var i = this.options.start; i < this.options.count; i++) {
@@ -125,7 +151,16 @@
 			imageObj.src=images[i];
 		}
 
-	} 
+		$(window).on('load', function() {
+			// this.set_sizes();
+			// TODO Hide loader
+		});
+
+	}
+
+	Rotator.prototype.set_sizes = function() {
+
+	}
 	
 	$.fn.Rotator = function(options) {
 		return new Rotator( $(this.selector), options );
