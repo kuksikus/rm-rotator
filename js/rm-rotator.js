@@ -10,6 +10,9 @@
 		// add_zeros: 'false' // Add leading zeros if filename like 01, 02, ...
 		// width: '300px'
 		// height: '500px'
+		zoom_max: '3',
+		zoom_step: '0.2',
+		// zoom: false
 	}
 
 
@@ -29,7 +32,8 @@
 		var this_ = this;
 		this.preloader();
 		this.container.css({
-						'position': 'relative'
+						'position': 'relative',
+						'overflow': 'hidden'
 					});
 		this.img.css({
 						'position': 'absolute',
@@ -62,6 +66,47 @@
 
 		this.img.attr('src', this.options.prefix + this.options.start + this.options.postfix)
 
+		this.zoom = 1;
+		this.container.on('mousewheel DOMMouseScroll', function(e) {
+
+			if (this_.options.zoom === false) {
+				return true;
+			}
+
+			this_.options.zoom_max = this_.options.zoom_max - 0;
+			this_.options.zoom_step = this_.options.zoom_step - 0;
+
+			// Up or down?
+			var delta = e.originalEvent.wheelDelta || e.originalEvent.detail * -40;
+			if (delta > 0) {
+				this_.zoom = this_.zoom + this_.options.zoom_step;
+
+				if (this_.zoom > this_.options.zoom_max) {
+					this_.zoom = this_.options.zoom_max;
+				}
+			}
+
+			if (delta < 0) {
+				this_.zoom = this_.zoom - this_.options.zoom_step;
+
+				if (this_.zoom < 1) {
+					this_.zoom = 1;
+				}				
+			}
+
+			scale_style = {
+						  '-webkit-transform': 'scale('+this_.zoom+')',
+						     '-moz-transform': 'scale('+this_.zoom+')',
+						      '-ms-transform': 'scale('+this_.zoom+')',
+						       '-o-transform': 'scale('+this_.zoom+')',
+						          'transform': 'scale('+this_.zoom+')'
+						}
+
+			this_.img.css(scale_style);
+
+			return false;
+		});
+
 
 		var is_move = false;
 		this.container.on('mousedown', function() {
@@ -80,6 +125,7 @@
 		var pos = this.options.start;
 		$(document).on('mousemove', function(e) {
 
+			// Fix mouseup missing outside browser
 			if (e.which == 0) {
 				is_move = false;
 			}
