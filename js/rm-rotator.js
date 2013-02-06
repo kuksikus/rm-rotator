@@ -5,9 +5,11 @@
 			undefined
 		) {
 
+
 	var defaults = {
-		
+		// add_zeros: 'false'				
 	}
+
 
 	function Rotator( element, options ) {
 		if (options.count === undefined || options.start === undefined || options.prefix === undefined || options.postfix === undefined) {
@@ -22,6 +24,8 @@
 	}
 
 	Rotator.prototype.init = function() {
+		this.preloader();
+
 		this.container.css({'position': 'relative'});
 		this.img.css({
 						'position': 'absolute',
@@ -31,7 +35,29 @@
 					});
 
 	}
+	
+	// Preload images
+	Rotator.prototype.preloader = function() {
+		imageObj = new Image();
+		images = new Array();
+		for (var i = this.options.start; i < this.options.count; i++) {
+			zi = i;
 
+			if (this.options.add_zeros) {
+				if (i < 10) {
+					zi = "0" + i;
+				}
+			}
+
+			images.push(this.options.prefix + zi + this.options.postfix);
+		}
+
+		// start preloading
+		for (var i = 0; i < images.length; i++) {
+			imageObj.src=images[i];
+		}
+
+	} 
 	
 	$.fn.Rotator = function(options) {
 		return new Rotator( $(this.selector), options );
