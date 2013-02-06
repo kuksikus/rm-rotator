@@ -26,13 +26,18 @@
 	Rotator.prototype.init = function() {
 		var this_ = this;
 		this.preloader();
-		this.container.css({'position': 'relative'});
+		this.container.css({
+						'position': 'relative'
+					});
 		this.img.css({
 						'position': 'absolute',
 						'left': 0,
 						'top': 0,
 						'z-index': 5
 					});
+
+
+		this.img.attr('src', this.options.prefix + this.options.start + this.options.postfix)
 
 
 		var is_move = false;
