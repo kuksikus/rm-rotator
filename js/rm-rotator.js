@@ -7,7 +7,7 @@
 
 
 	var defaults = {
-		// add_zeros: 'false'				
+		// add_zeros: 'false' // Add leading zeros if filename like 01, 02, ...
 	}
 
 
@@ -24,8 +24,8 @@
 	}
 
 	Rotator.prototype.init = function() {
+		var this_ = this;
 		this.preloader();
-
 		this.container.css({'position': 'relative'});
 		this.img.css({
 						'position': 'absolute',
@@ -34,6 +34,69 @@
 						'z-index': 5
 					});
 
+
+		var is_move = false;
+		this.container.on('mousedown', function() {
+			is_move = true;
+		});
+
+		this.container.on('dragstart', function() {
+			return false;
+		});
+
+		$(document).on('mouseup', function() {
+			is_move = false;
+		});
+
+		var prev_x = 0;
+		var pos = this.options.start;
+		$(document).on('mousemove', function(e) {
+
+			if (e.which == 0) {
+				is_move = false;
+			}
+
+			var speed = 0;
+			if (is_move) {
+				x = e.clientX;
+				if (x > prev_x) {
+					speed = x - prev_x;
+					pos--;
+					if (speed > 10) {
+						pos = pos - 2;
+					}
+					if (speed > 20) {
+						pos = pos - 3;
+					}
+				} else if (x < prev_x) {
+					speed = prev_x - x;
+					pos++;
+					if (speed > 10) {
+						pos = pos + 2;
+					}
+					if (speed > 20) {
+						pos = pos + 3;
+					}
+				}
+
+				if (pos < 0) {
+					pos = this_.options.count - 1;
+				} else if (pos >= this_.options.count) {
+					pos = 0;
+				}
+
+				var zpos = pos;
+				if (this_.options.add_zeros) {
+					if (pos < 10) {
+						zpos = "0" + pos;
+					}
+				}
+
+				this_.img.attr('src', this_.options.prefix + zpos + this_.options.postfix);
+
+				prev_x = x;
+			}
+		});
 	}
 	
 	// Preload images
