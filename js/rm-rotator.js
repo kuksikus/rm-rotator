@@ -7,15 +7,16 @@
 
 
 	var defaults = {
-		// add_zeros: 'false' // Add leading zeros if filename like 01, 02, ...
-		// width: '300px'
-		// height: '500px'
+		// add_zeros: 'false', // Add leading zeros if filename like 01, 02, ...
+		// width: '300px',
+		// height: '500px',
 		start: 0,
 		zoom_max: '1.5',
 		zoom_step: '0.2',
 		// zoom: false
-		rotate_delay: 40
-		// auto_rotate: false
+		rotate_delay: 40,
+		// auto_rotate: false,
+		rotate: false
 	}
 
 
@@ -58,10 +59,6 @@
 
 		// Add controls
 		this.add_controls();
-
-		if (this.options.auto_rotate) {
-			this.auto_rotate(this);
-		}
 
 		this.img.attr('src', this.options.prefix + this.options.start + this.options.postfix)
 
@@ -174,6 +171,10 @@
 
 	Rotator.prototype.rotate_to = function( position ) {
 
+		if (this.options.rotate === false) {
+			return false;
+		}
+
 		if (position < 0) {
 			position = this.options.count - 1;
 		} else if (position >= this.options.count) {
@@ -194,8 +195,19 @@
 	
 	// Preload images
 	Rotator.prototype.preloader = function() {
+		var this_ = this;
 
-		// TODO Show loader
+		var loader = $('<div>');
+		loader.css({
+					position: 'absolute',
+					backgroundColor: '#fff',
+					opacity: 0.5,
+					width: '100%',
+					height: '100%',
+					zIndex: 9
+		});
+		loader.appendTo(this.container);
+
 
 		imageObj = new Image();
 		images = new Array();
@@ -218,6 +230,13 @@
 
 		$(window).on('load', function() {
 			// TODO Hide loader
+			loader.remove();
+			// Enable rotate after loading all images
+			this_.options.rotate = true;
+			// Start auto rotate after loading all images
+			if (this_.options.auto_rotate) {
+				this_.auto_rotate(this_);
+			}
 		});
 
 	}

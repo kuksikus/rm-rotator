@@ -1,11 +1,11 @@
 ##Simple rotator for images
 
 ### TODO:
-* Add loader
+* Change type of rotate (withour changing src)
+* Add loader with progressbar
 * Add rotate conrol
 * Inertial rotation option
 * Test in all browsers
-* Fix: auto rotate only after all images loaded
 * Canvas icons (?)
 * Images from list (?)
 
