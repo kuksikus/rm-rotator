@@ -10,9 +10,10 @@
 		// add_zeros: 'false' // Add leading zeros if filename like 01, 02, ...
 		// width: '300px'
 		// height: '500px'
-		zoom_max: '3',
+		zoom_max: '1.5',
 		zoom_step: '0.2',
 		// zoom: false
+		rotate_delay: 40
 	}
 
 
@@ -21,6 +22,7 @@
 			return false;
 		}
 
+		this.this_ = this;
 		this.container = element;
 		this.img = element.find('img:first');
 		this.options = $.extend({}, defaults, options);
@@ -39,30 +41,21 @@
 						'position': 'absolute',
 						'left': 0,
 						'top': 0,
-						'z-index': 5
+						'z-index': 5,
+						'-webkit-touch-callout': 'none',
+						'-webkit-user-select': 'none',
+						'-khtml-user-select': 'none',
+						'-moz-user-select': 'none',
+						'-ms-user-select': 'none',
+						'user-select': 'none'
 					});
 
-		if (this.options.width) {
-			this.container.css('width', this.options.width);
-			this.img.css('width', this.options.width);
-		}
 
-		if (this.options.height) {
-			this.container.css('height', this.options.height);
-			this.img.css('height', this.options.height);
-		}
+		// Set sizes
+		this.set_sizes();
 
-		// Auto set size to block after load first image
-		if (!this.options.width || !this.options.height) {
-			this.img.on('load', function() {
-				var width = this_.img.width();
-				var height = this_.img.height();
-				this_.container.css({
-								width: width,
-								height: height
-					});
-			});
-		}
+		// Add controls
+		this.add_controls();
 
 		this.img.attr('src', this.options.prefix + this.options.start + this.options.postfix)
 
@@ -122,7 +115,7 @@
 		});
 
 		var prev_x = 0;
-		var pos = this.options.start;
+		this.position = this.options.start;
 		$(document).on('mousemove', function(e) {
 
 			// Fix mouseup missing outside browser
@@ -130,6 +123,7 @@
 				is_move = false;
 			}
 
+			var pos = this_.position
 			var speed = 0;
 			if (is_move) {
 				x = e.clientX;
@@ -159,18 +153,32 @@
 					pos = 0;
 				}
 
-				var zpos = pos;
-				if (this_.options.add_zeros) {
-					if (pos < 10) {
-						zpos = "0" + pos;
-					}
-				}
-
-				this_.img.attr('src', this_.options.prefix + zpos + this_.options.postfix);
+				this_.rotate_to(pos);
 
 				prev_x = x;
 			}
 		});
+	}
+
+
+	Rotator.prototype.rotate_to = function( position ) {
+
+		if (position < 0) {
+			position = this.options.count - 1;
+		} else if (position >= this.options.count) {
+			position = 0;
+		}
+
+		this.position = position;
+
+		var zpos = position;
+		if (this.options.add_zeros) {
+			if (position < 10) {
+				zpos = "0" + position;
+			}
+		}
+
+		this.img.attr('src', this.options.prefix + zpos + this.options.postfix);
 	}
 	
 	// Preload images
@@ -198,14 +206,89 @@
 		}
 
 		$(window).on('load', function() {
-			// this.set_sizes();
 			// TODO Hide loader
 		});
 
 	}
 
+	// Set image and block sizes
 	Rotator.prototype.set_sizes = function() {
+		var this_ = this;
+		if (this.options.width) {
+			this.container.css('width', this.options.width);
+			this.img.css('width', this.options.width);
+		}
 
+		if (this.options.height) {
+			this.container.css('height', this.options.height);
+			this.img.css('height', this.options.height);
+		}
+
+		// Auto set size to block after load first image
+		if (!this.options.width || !this.options.height) {
+			this.img.on('load', function() {
+				var width = this_.img.width();
+				var height = this_.img.height();
+				this_.container.css({
+								width: width,
+								height: height
+					});
+			});
+		}
+	}
+
+	Rotator.prototype.add_controls = function() {
+		var this_ = this;
+		if (!this.options || !this.options.controls) {
+			return false;
+		}
+
+		var controls = $('<div>', {
+									class: 'rm-present_controls'
+		}).appendTo(this.container);
+
+		controls.css({
+						width: '100%',
+						height: '100%',
+						position: 'absolute',
+						zIndex: 7
+		});
+
+		for (key in this.options.controls) {
+			if (this.options.controls[key] == 'rotate') {
+				var rotate_control = $('<img>', {
+													opacity: 0,
+													src: 'images/rotate.png'
+				});
+
+				rotate_control.css({
+										position: 'absolute',
+										bottom: '10px',
+										left: '50%'
+				});
+
+				$(rotate_control).appendTo(controls);
+
+				rotate_control.on('click', function() {
+					this_.auto_rotate(this_);
+				});
+			}
+		}
+	}
+
+	Rotator.prototype.auto_rotate = function(rotator) {
+		delay = rotator.options.rotate_delay - 0;
+
+		if (!rotator.is_rotate) {
+			rotator.is_rotate = setInterval(function() {
+				var position = rotator.position;
+				position++;
+				rotator.rotate_to(position);
+			}, delay);
+		} else {
+			clearInterval(rotator.is_rotate);
+			rotator.is_rotate = false;
+		}
 	}
 	
 	$.fn.Rotator = function(options) {

@@ -6,7 +6,7 @@
 * Add loader
 * Add rotate conrol
 * Add autoroate and autorotate control
-* Add zoom and zoom control
+* <del>Add zoom</del> and zoom control
 * Inertial rotation option
 * Canvas icons
 * Images from list (?)
