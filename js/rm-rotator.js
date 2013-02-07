@@ -254,17 +254,6 @@
 			return false;
 		}
 
-		var controls = $('<div>', {
-									class: 'rm-present_controls'
-		}).appendTo(this.container);
-
-		controls.css({
-						width: '100%',
-						height: '100%',
-						position: 'absolute',
-						zIndex: 7
-		});
-
 		for (key in this.options.controls) {
 			if (this.options.controls[key] == 'rotate') {
 				var rotate_control = $('<img>', {
@@ -275,10 +264,11 @@
 				rotate_control.css({
 										position: 'absolute',
 										bottom: '10px',
-										left: '50%'
+										left: '50%',
+										zIndex: 7
 				});
 
-				$(rotate_control).appendTo(controls);
+				$(rotate_control).appendTo(this.container);
 
 				rotate_control.on('click', function() {
 					this_.auto_rotate(this_);
