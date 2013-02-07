@@ -2,34 +2,240 @@
 <head>
 	<script src="http://yandex.st/jquery/1.9.1/jquery.min.js"></script>
 	<script src="js/rm-rotator.js"></script>
+
+	<script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
+	<link rel="stylesheet" href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css">
+
+	<style>
+		body {
+			font-family: Verdana;
+		}
+
+		h3 {
+			margin-bottom: 10px;
+		}
+
+		.prettyprint {
+			width: 500px;
+			float: left;
+			margin-right: 20px;
+		}
+
+		.demo_rotator {
+			float: left;
+		}
+
+		.clear {
+			clear: both;
+		}
+
+		.table {
+			border: 1px solid #999;
+			border-collapse: collapse;
+			margin-bottom: 50px;
+		}
+
+		.table td, .table th {
+			border: 1px solid #999;
+			padding: 4px;
+			font-size: 12px;
+		}
+	</style>
 	<script>
 		$(function() {
-			$('#rm-rotator').Rotator({
+			$('#example1').Rotator({
 				count: 60,
 				start: 0,
 				prefix: 'demo_images/violet/img_0_0_',
 				postfix: '.jpg',
-				height: '500px',
-				controls: ['rotate'],
-				auto_rotate: true
+				height: '300px'
 			});
+		})
 
-			$('#rm-rotator2').Rotator({
+		$(function() {
+			$('#example2').Rotator({
 				count: 60,
-				start: 30,
+				start: 0,
 				prefix: 'demo_images/violet/img_0_0_',
-				postfix: '.jpg'
+				postfix: '.jpg',
+				height: '300px',
+				auto_rotate: true,
+				controls: ['rotate']
 			});
 		})
 	</script>
 </head>
 <body>
-	<div id="rm-rotator">
-		<img src="demo_images/violet/img_0_0_0.jpg">
-	</div>
 
-	<div id="rm-rotator2">
-		<img src="demo_images/violet/img_0_0_0.jpg">
-	</div>
+
+
+
+<h2>Demo page of <a href="https://github.com/kuksikus/rm-rotator">rm-rotator</a></h2>
+
+
+<h3>Example #1</h3>
+<div>Standard use</div>
+
+<pre class="prettyprint">
+$(function() {
+	$('#example1').Rotator({
+		count: 60,
+		start: 0,
+		prefix: 'demo_images/violet/img_0_0_',
+		postfix: '.jpg',
+		height: '300px'
+	});
+})
+
+&lt;div id="example1"&gt;
+	&lt;img src="demo_images/violet/img_0_0_0.jpg"&gt;
+&lt;/div&gt;
+</pre>
+
+<div id="example1" class="demo_rotator">
+	<img src="demo_images/violet/img_0_0_0.jpg">
+</div>
+
+<div class="clear"></div>
+
+
+<h3>Example #2</h3>
+<div>Auto rotate and controls</div>
+
+<pre class="prettyprint">
+$(function() {
+	$('#example2').Rotator({
+		count: 60,
+		start: 0,
+		prefix: 'demo_images/violet/img_0_0_',
+		postfix: '.jpg',
+		height: '300px',
+		auto_rotate: true,
+		controls: ['rotate']
+	});
+})
+
+&lt;div id="example2"&gt;
+	&lt;img src="demo_images/violet/img_0_0_0.jpg"&gt;
+&lt;/div&gt;
+</pre>
+
+<div id="example2" class="demo_rotator">
+	<img src="demo_images/violet/img_0_0_0.jpg">
+</div>
+
+<div class="clear"></div>
+
+<h3>All options</h3>
+<table class="table">
+	<tr>
+		<th>Option</th>
+		<th>Description</th>
+		<th>Required</th>
+		<th>Default value</th>
+		<th>Values</th>
+		<th>Example</th>
+	</tr>
+	<tr>
+		<td>count (int)</td>
+		<td>Count of images</td>
+		<td>yes</td>
+		<td></td>
+		<td></td>
+		<td>count: 60</td>
+	</tr>
+	<tr>
+		<td>prefix (string)</td>
+		<td>Path to images and image prefix</td>
+		<td>yes</td>
+		<td></td>
+		<td></td>
+		<td>prefix: 'path/to/images/image_'</td>
+	</tr>
+	<tr>
+		<td>postfix (string)</td>
+		<td>Image postfix</td>
+		<td>yes</td>
+		<td></td>
+		<td></td>
+		<td>postfix: '.jpg'</td>
+	</tr>
+	<tr>
+		<td>start (int)</td>
+		<td>Set start frame</td>
+		<td></td>
+		<td>0</td>
+		<td></td>
+		<td>start: 15</td>
+	</tr>
+	<tr>
+		<td>add_zeros (bool)</td>
+		<td>Set 'true' if filenames like image09 image10</td>
+		<td></td>
+		<td>false</td>
+		<td></td>
+		<td>add_zeros: true</td>
+	</tr>
+	<tr>
+		<td>width\height (string)</td>
+		<td>Set image sizes</td>
+		<td></td>
+		<td><i>original size</i></td>
+		<td></td>
+		<td>height: '300px'</td>
+	</tr>
+	<tr>
+		<td>zoom_max (float)</td>
+		<td>Set max zoom</td>
+		<td></td>
+		<td>1.5</td>
+		<td></td>
+		<td>zoom_max: 2.3</td>
+	</tr>
+	<tr>
+		<td>zoom_step (float)</td>
+		<td>Set zoom step</td>
+		<td></td>
+		<td>0.2</td>
+		<td></td>
+		<td>zoom_step: 0.5</td>
+	</tr>
+	<tr>
+		<td>zoom (bool)</td>
+		<td>Enable or disable zoom</td>
+		<td></td>
+		<td>true</td>
+		<td></td>
+		<td>zoom: false</td>
+	</tr>
+	<tr>
+		<td>rotate_delay (int) in milliseconds</td>
+		<td>Rotate delay for speed control</td>
+		<td></td>
+		<td>40 <i>(ms)</i></td>
+		<td></td>
+		<td>rotate_delay: 100</td>
+	</tr>
+	<tr>
+		<td>auto_rotate (bool)</td>
+		<td>Enable or disable auto rotate</td>
+		<td></td>
+		<td>false</td>
+		<td></td>
+		<td>auto_rotate: true</td>
+	</tr>
+	<tr>
+		<td>controls (array)</td>
+		<td>List of enabled controls</td>
+		<td></td>
+		<td></td>
+		<td>['rotate', 'all']</td>
+		<td>controls: ['rotate']</td>
+	</tr>
+</table>
+
+<script>
+	window.prettyPrint && prettyPrint();
+</script>
 </body>
 </html>

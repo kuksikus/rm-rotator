@@ -15,3 +15,4 @@
 * Set sizes in options
 * Acceleration during rotate
 * Autorotate
+* Scroll to zoom

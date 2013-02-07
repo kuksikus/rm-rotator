@@ -10,10 +10,12 @@
 		// add_zeros: 'false' // Add leading zeros if filename like 01, 02, ...
 		// width: '300px'
 		// height: '500px'
+		start: 0,
 		zoom_max: '1.5',
 		zoom_step: '0.2',
 		// zoom: false
 		rotate_delay: 40
+		// auto_rotate: false
 	}
 
 
