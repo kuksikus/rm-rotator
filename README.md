@@ -5,7 +5,7 @@
 * <del>Set sizes in options + set sizes of block from css</del>
 * Add loader
 * Add rotate conrol
-* Add autoroate and autorotate control
+* <del>Add autoroate and autorotate control</del>
 * <del>Add zoom</del> and zoom control
 * Inertial rotation option
 * Canvas icons
@@ -14,3 +14,4 @@
 ### Features:
 * Set sizes in options
 * Acceleration during rotate
+* Autorotate

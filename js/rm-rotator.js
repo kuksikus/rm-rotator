@@ -57,6 +57,10 @@
 		// Add controls
 		this.add_controls();
 
+		if (this.options.auto_rotate) {
+			this.auto_rotate(this);
+		}
+
 		this.img.attr('src', this.options.prefix + this.options.start + this.options.postfix)
 
 		this.zoom = 1;
@@ -126,6 +130,11 @@
 			var pos = this_.position
 			var speed = 0;
 			if (is_move) {
+
+				if (this_.is_rotate) {
+					this_.auto_rotate(this_);
+				}
+
 				x = e.clientX;
 				if (x > prev_x) {
 					speed = x - prev_x;
