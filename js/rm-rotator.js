@@ -30,6 +30,11 @@
 		this.img = element.find('img:first');
 		this.options = $.extend({}, defaults, options);
 		this.defaults = defaults;
+
+		if (this.options.add_zeros && this.options.start < 10) {
+			this.options.start = '0' + this.options.start;
+		}
+
 		this.init();
 	}
 
