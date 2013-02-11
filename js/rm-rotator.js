@@ -41,10 +41,6 @@
 		this.options = $.extend({}, defaults, options);
 		this.defaults = defaults;
 
-		if (this.options.add_zeros && this.options.start < 10) {
-			this.options.start = '0' + this.options.start;
-		}
-
 		this.init();
 	}
 
@@ -262,6 +258,8 @@
 		if (this.loaded === this.options.count) {
 			this.loader.remove();
 			this.options.rotate = true;
+			this.rotate_to(this.options.start);
+
 			if (this.options.auto_rotate) {
 				this.auto_rotate(this);
 			}
@@ -277,7 +275,6 @@
 		var this_ = this;
 		if (this.options.width) {	
 			images_width = this.options.count * this.options.width;
-			console.log(this.options.width)
 			this.container.css('width', this.options.width);
 			this.scroll.css('width', images_width);
 			this.scroll.find('img').css('width', this.options.width);
