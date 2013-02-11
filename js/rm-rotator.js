@@ -61,7 +61,6 @@
 					left: 0,
 					top: 0,
 					'z-index': 5,
-					'-webkit-touch-callout': 'none',
 					'-webkit-user-select': 'none',
 					'-khtml-user-select': 'none',
 					'-moz-user-select': 'none',
@@ -80,7 +79,6 @@
 					paddingTop: '50%',
 					fontSize: '5em',
 					cursor: 'default',
-					'-webkit-touch-callout': 'none',
 					'-webkit-user-select': 'none',
 					'-khtml-user-select': 'none',
 					'-moz-user-select': 'none',
@@ -135,7 +133,7 @@
 
 
 		var is_move = false;
-		this.container.on('mousedown', function() {
+		this.container.on('mousedown touchstart', function() {
 			is_move = true;
 		});
 
@@ -143,17 +141,20 @@
 			return false;
 		});
 
-		$(document).on('mouseup', function() {
+		$(document).on('mouseup touchend', function(e) {
 			is_move = false;
+		});
+
+		this.container.on('touchstart', function(e) {
+			e.preventDefault();
 		});
 
 		var prev_x = 0;
 		this.position = this.options.start;
-		$(document).on('mousemove', function(e) {
-
+		$(document).on('mousemove touchmove', function(e) {
 			// Fix mouseup missing outside browser
 			if (e.which == 0) {
-				is_move = false;
+				// is_move = false;
 			}
 
 			var pos = this_.position
@@ -164,7 +165,14 @@
 					this_.auto_rotate(this_);
 				}
 
-				x = e.clientX;
+				var x = pos;
+				if (e.clientX) {
+					x = e.clientX;
+				} else if (e.originalEvent.targetTouches) {
+					x = e.originalEvent.targetTouches[0].clientX;
+					e.preventDefault();
+				}
+
 				if (x > prev_x) {
 					speed = x - prev_x;
 					pos--;
