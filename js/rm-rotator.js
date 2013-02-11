@@ -27,7 +27,17 @@
 
 		this.this_ = this;
 		this.container = element;
-		this.img = element.find('img:first');
+		this.container.empty();
+		this.loaded = 0;
+
+		var scroll = $('<div>');
+		scroll.appendTo(this.container);
+		this.scroll = scroll;
+
+		var loader = $('<div>');
+		loader.appendTo(this.container);
+		this.loader = loader;
+
 		this.options = $.extend({}, defaults, options);
 		this.defaults = defaults;
 
@@ -45,27 +55,34 @@
 						'position': 'relative',
 						'overflow': 'hidden'
 					});
-		this.img.css({
-						'position': 'absolute',
-						'left': 0,
-						'top': 0,
-						'z-index': 5,
-						'-webkit-touch-callout': 'none',
-						'-webkit-user-select': 'none',
-						'-khtml-user-select': 'none',
-						'-moz-user-select': 'none',
-						'-ms-user-select': 'none',
-						'user-select': 'none'
-					});
 
+		this.scroll.css({
+					position: 'absolute',
+					left: 0,
+					top: 0,
+					'z-index': 5,
+					'-webkit-touch-callout': 'none',
+					'-webkit-user-select': 'none',
+					'-khtml-user-select': 'none',
+					'-moz-user-select': 'none',
+					'-ms-user-select': 'none',
+					'user-select': 'none'
+		});
+
+		this.loader.css({
+					position: 'absolute',
+					backgroundColor: '#fff',
+					opacity: 0.5,
+					width: '100%',
+					height: '100%',
+					zIndex: 9
+		});
 
 		// Set sizes
 		this.set_sizes();
 
 		// Add controls
 		this.add_controls();
-
-		this.img.attr('src', this.options.prefix + this.options.start + this.options.postfix)
 
 		this.zoom = 1;
 		this.container.on('mousewheel DOMMouseScroll', function(e) {
@@ -103,7 +120,7 @@
 						          'transform': 'scale('+this_.zoom+')'
 						}
 
-			this_.img.css(scale_style);
+			// this_.img.css(scale_style);
 
 			return false;
 		});
@@ -175,7 +192,6 @@
 
 
 	Rotator.prototype.rotate_to = function( position ) {
-
 		if (this.options.rotate === false) {
 			return false;
 		}
@@ -188,86 +204,95 @@
 
 		this.position = position;
 
-		var zpos = position;
-		if (this.options.add_zeros) {
-			if (position < 10) {
-				zpos = "0" + position;
-			}
+		var width = 0;
+		if (this.options.width) {
+			width = this.options.width;
+		} else {
+			width = this.first.width();
 		}
 
-		this.img.attr('src', this.options.prefix + zpos + this.options.postfix);
+		var left = position * width;
+		left = 0 - left;
+
+
+		this.scroll.css('left', left+'px');
 	}
 	
 	// Preload images
 	Rotator.prototype.preloader = function() {
 		var this_ = this;
 
-		var loader = $('<div>');
-		loader.css({
-					position: 'absolute',
-					backgroundColor: '#fff',
-					opacity: 0.5,
-					width: '100%',
-					height: '100%',
-					zIndex: 9
-		});
-		loader.appendTo(this.container);
+		for (var i = 0; i < this.options.count; i++) {
 
-
-		imageObj = new Image();
-		images = new Array();
-		for (var i = this.options.start; i < this.options.count; i++) {
-			zi = i;
-
-			if (this.options.add_zeros) {
-				if (i < 10) {
-					zi = "0" + i;
-				}
+			var zi = i;
+			if (this.options.add_zeros && i < 10) {
+				zi = '0' + i;
 			}
 
-			images.push(this.options.prefix + zi + this.options.postfix);
-		}
+			var img = $('<img>', {
+				src: this.options.prefix + zi + this.options.postfix
+			});
 
-		// start preloading
-		for (var i = 0; i < images.length; i++) {
-			imageObj.src=images[i];
-		}
+			img.on('load', function() {
+				this_.loaded++;
+				this_.progress();
+			});
 
-		$(window).on('load', function() {
-			// TODO Hide loader
-			loader.remove();
-			// Enable rotate after loading all images
-			this_.options.rotate = true;
-			// Start auto rotate after loading all images
-			if (this_.options.auto_rotate) {
-				this_.auto_rotate(this_);
+			img.css('float', 'left');
+
+			// Get first image
+			if (i === 0) {
+				this.first = img;
 			}
-		});
 
+			this.scroll.append(img);
+		}
 	}
+
+	Rotator.prototype.progress = function() {
+		
+
+		if (this.loaded === this.options.count) {
+			this.loader.remove();
+			this.options.rotate = true;
+			if (this.options.auto_rotate) {
+				this.auto_rotate(this);
+			}
+		}
+	}
+
 
 	// Set image and block sizes
 	Rotator.prototype.set_sizes = function() {
 		var this_ = this;
 		if (this.options.width) {
+			images_width = this.count * this.options.width;
 			this.container.css('width', this.options.width);
-			this.img.css('width', this.options.width);
+			this.scroll.css('width', images_width);
 		}
 
 		if (this.options.height) {
+			console.log(this.options.height);
 			this.container.css('height', this.options.height);
-			this.img.css('height', this.options.height);
+			this.scroll.css('height', this.options.height);
 		}
 
 		// Auto set size to block after load first image
-		if (!this.options.width || !this.options.height) {
-			this.img.on('load', function() {
-				var width = this_.img.width();
-				var height = this_.img.height();
+		if (!this.options.width && !this.options.height) {
+			this.first.on('load', function() {
+				var width = this_.first.width();
+				var height = this_.first.height();
+				var images_width = this_.first.width() * this_.options.count;
+
 				this_.container.css({
 								width: width,
 								height: height
 					});
+
+				this_.scroll.css({
+								width: images_width,
+								height: height
+				});
 			});
 		}
 	}
