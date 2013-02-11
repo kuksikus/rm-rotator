@@ -16,7 +16,8 @@
 		// zoom: false
 		rotate_delay: 40,
 		// auto_rotate: false,
-		rotate: false
+		rotate: false,
+		progress: true
 	}
 
 
@@ -35,7 +36,9 @@
 		scroll.appendTo(this.container);
 		this.scroll = scroll;
 
-		var loader = $('<div>');
+		var loader = $('<div>', {
+									class: 'rm-rotator_loader'
+		});
 		loader.appendTo(this.container);
 		this.loader = loader;
 
@@ -72,7 +75,18 @@
 					opacity: 0.5,
 					width: '100%',
 					height: '100%',
-					zIndex: 9
+					zIndex: 9,
+					textAlign: 'center',
+					paddingTop: '50%',
+					fontSize: '5em',
+					cursor: 'default',
+					'-webkit-touch-callout': 'none',
+					'-webkit-user-select': 'none',
+					'-khtml-user-select': 'none',
+					'-moz-user-select': 'none',
+					'-ms-user-select': 'none',
+					'user-select': 'none'
+
 		});
 
 		// Add controls
@@ -256,8 +270,6 @@
 	}
 
 	Rotator.prototype.progress = function() {
-		
-
 		if (this.loaded === this.options.count) {
 			this.loader.remove();
 			this.options.rotate = true;
@@ -269,6 +281,12 @@
 
 			// Set sizes
 			this.set_sizes();
+		} else {
+			if (this.options.progress) {
+				var percent = this.loaded / this.options.count * 100;
+				percent = Math.round(percent);
+				this.loader.text(percent + '%');
+			}
 		}
 	}
 

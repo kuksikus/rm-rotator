@@ -2,7 +2,6 @@
 
 ### TODO:
 * Test in all browsers
-* Add loader with progressbar
 * Add rotate conrol
 * Inertial rotation option
 * Canvas icons (?)
@@ -13,3 +12,4 @@
 * Acceleration during rotate
 * Autorotate
 * Scroll to zoom
+* Progress
