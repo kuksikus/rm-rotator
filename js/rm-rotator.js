@@ -246,7 +246,9 @@
 			// Get first image
 			if (i === 0) {
 				this.first = img;
-				this.set_sizes();
+				this.first.on('load', function() {
+					this_.set_sizes();
+				});
 			}
 
 			this.scroll.append(img);
