@@ -78,9 +78,6 @@
 					zIndex: 9
 		});
 
-		// Set sizes
-		this.set_sizes();
-
 		// Add controls
 		this.add_controls();
 
@@ -222,6 +219,15 @@
 	Rotator.prototype.preloader = function() {
 		var this_ = this;
 
+		var css_obj = new Object;
+		css_obj.float = 'left';
+		if (this.options.width) {
+			css_obj.width = this.options.width;
+		}
+		if (this.options.height) {
+			css_obj.height = this.options.height;
+		}
+
 		for (var i = 0; i < this.options.count; i++) {
 
 			var zi = i;
@@ -233,12 +239,12 @@
 				src: this.options.prefix + zi + this.options.postfix
 			});
 
+			img.css(css_obj);
+
 			img.on('load', function() {
 				this_.loaded++;
 				this_.progress();
 			});
-
-			img.css('float', 'left');
 
 			// Get first image
 			if (i === 0) {
@@ -258,6 +264,9 @@
 			if (this.options.auto_rotate) {
 				this.auto_rotate(this);
 			}
+
+			// Set sizes
+			this.set_sizes();
 		}
 	}
 
@@ -272,27 +281,30 @@
 		}
 
 		if (this.options.height) {
-			console.log(this.options.height);
 			this.container.css('height', this.options.height);
 			this.scroll.css('height', this.options.height);
+
+			if (!this.options.width) {
+				width = this.first.width();
+				this.container.css('width', width);
+				this.scroll.css('width', width * this.options.count);
+			}
 		}
 
 		// Auto set size to block after load first image
 		if (!this.options.width && !this.options.height) {
-			this.first.on('load', function() {
-				var width = this_.first.width();
-				var height = this_.first.height();
-				var images_width = this_.first.width() * this_.options.count;
+			var width = this_.first.width();
+			var height = this_.first.height();
+			var images_width = this_.first.width() * this_.options.count;
 
-				this_.container.css({
-								width: width,
-								height: height
-					});
-
-				this_.scroll.css({
-								width: images_width,
-								height: height
+			this_.container.css({
+							width: width,
+							height: height
 				});
+
+			this_.scroll.css({
+							width: images_width,
+							height: height
 			});
 		}
 	}
