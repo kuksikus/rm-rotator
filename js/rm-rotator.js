@@ -249,6 +249,7 @@
 			// Get first image
 			if (i === 0) {
 				this.first = img;
+				this.set_sizes();
 			}
 
 			this.scroll.append(img);
@@ -274,10 +275,17 @@
 	// Set image and block sizes
 	Rotator.prototype.set_sizes = function() {
 		var this_ = this;
-		if (this.options.width) {
-			images_width = this.count * this.options.width;
+		if (this.options.width) {	
+			images_width = this.options.count * this.options.width;
+			console.log(this.options.width)
 			this.container.css('width', this.options.width);
 			this.scroll.css('width', images_width);
+			this.scroll.find('img').css('width', this.options.width);
+
+			if (!this.options.height) {
+				height = this.first.height();
+				this.container.css('height', height);
+			}
 		}
 
 		if (this.options.height) {
