@@ -29,6 +29,7 @@
 		this.container = element;
 		this.container.empty();
 		this.loaded = 0;
+		this.current = options.start;
 
 		var scroll = $('<div>');
 		scroll.appendTo(this.container);
@@ -79,7 +80,7 @@
 
 		this.zoom = 1;
 		this.container.on('mousewheel DOMMouseScroll', function(e) {
-
+			return false;
 			if (this_.options.zoom === false) {
 				return true;
 			}
@@ -113,7 +114,7 @@
 						          'transform': 'scale('+this_.zoom+')'
 						}
 
-			// this_.img.css(scale_style);
+			this_.scroll.find('img:eq('+this_.current+')').css(scale_style);
 
 			return false;
 		});
@@ -207,7 +208,7 @@
 		var left = position * width;
 		left = 0 - left;
 
-
+		this.current = position;
 		this.scroll.css('left', left+'px');
 	}
 	
