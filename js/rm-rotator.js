@@ -350,22 +350,22 @@
 		}
 
 		for (key in this.options.controls) {
-			if (this.options.controls[key] == 'rotate') {
-				var rotate_control = $('<img>', {
-													opacity: 0,
-													src: 'images/rotate.png'
+			if (this.options.controls[key] == 'autorotate') {
+				var autorotate_control = $('<img>', {
+													src: 'images/autorotate.png'
 				});
 
-				rotate_control.css({
+				autorotate_control.css({
 										position: 'absolute',
 										bottom: '10px',
 										left: '50%',
 										zIndex: 7
 				});
 
-				$(rotate_control).appendTo(this.container);
+				$(autorotate_control).appendTo(this.container);
 
-				rotate_control.on('click', function() {
+				autorotate_control.on('click', function() {
+					console.log('click')
 					this_.auto_rotate(this_);
 				});
 			}

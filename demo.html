@@ -46,27 +46,10 @@
 		}
 	</style>
 	<script>
-		$(function() {
-			$('#example1').Rotator({
-				count: 60,
-				start: 10,
-				prefix: 'demo_images/violet/img_0_0_',
-				postfix: '.jpg',
-				width: 300
-			});
-		});
-
-		$(function() {
-			$('#example2').Rotator({
-				count: 60,
-				start: 0,
-				prefix: 'demo_images/violet/img_0_0_',
-				postfix: '.jpg',
-				height: 300,
-				auto_rotate: true,
-				controls: ['rotate']
-			});
-		});
+	$(function() {
+		eval($('#example1_code').text());
+		eval($('#example2_code').text());
+	});
 	</script>
 </head>
 <body>
@@ -80,7 +63,7 @@
 <h3>Example #1</h3>
 <div>Standard use</div>
 
-<pre class="prettyprint">
+<pre class="prettyprint" id="example1_code">
 $(function() {
 	$('#example1').Rotator({
 		count: 60,
@@ -90,15 +73,9 @@ $(function() {
 		width: 300
 	});
 });
-
-&lt;div id="example1"&gt;
-	&lt;img src="demo_images/violet/img_0_0_0.jpg"&gt;
-&lt;/div&gt;
 </pre>
 
-<div id="example1" class="demo_rotator">
-	<img src="demo_images/violet/img_0_0_0.jpg">
-</div>
+<div id="example1" class="demo_rotator"></div>
 
 <div class="clear"></div>
 
@@ -106,7 +83,7 @@ $(function() {
 <h3>Example #2</h3>
 <div>Auto rotate and controls</div>
 
-<pre class="prettyprint">
+<pre class="prettyprint" id="example2_code">
 $(function() {
 	$('#example2').Rotator({
 		count: 60,
@@ -115,18 +92,12 @@ $(function() {
 		postfix: '.jpg',
 		height: 300,
 		auto_rotate: true,
-		controls: ['rotate']
+		controls: ['autorotate']
 	});
 });
-
-&lt;div id="example2"&gt;
-	&lt;img src="demo_images/violet/img_0_0_0.jpg"&gt;
-&lt;/div&gt;
 </pre>
 
-<div id="example2" class="demo_rotator">
-	<img src="demo_images/violet/img_0_0_0.jpg">
-</div>
+<div id="example2" class="demo_rotator"></div>
 
 <div class="clear"></div>
 
@@ -242,7 +213,7 @@ $(function() {
 		<td></td>
 		<td></td>
 		<td>['rotate', 'all']</td>
-		<td>controls: ['rotate']</td>
+		<td>controls: ['autorotate']</td>
 	</tr>
 </table>
 
