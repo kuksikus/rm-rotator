@@ -1,10 +1,9 @@
-;(function(
+(function(
 			$,
 			window,
 			document,
 			undefined
 		) {
-
 
 	var defaults = {
 		// add_zeros: 'false', // Add leading zeros if filename like 01, 02, ...
@@ -22,69 +21,64 @@
 
 
 	function Rotator( element, options ) {
-		if (options.count === undefined || options.start === undefined || options.prefix === undefined || options.postfix === undefined) {
-			return false;
-		}
+		if (options.count !== undefined && options.start !== undefined && options.prefix !== undefined && options.postfix !== undefined) {
+            this.container = element;
+            this.container.empty();
+            this.loaded = 0;
+            this.current = options.start;
 
-		this.this_ = this;
-		this.container = element;
-		this.container.empty();
-		this.loaded = 0;
-		this.current = options.start;
+            var scroll = $('<div>');
+            scroll.appendTo(this.container);
+            this.scroll = scroll;
 
-		var scroll = $('<div>');
-		scroll.appendTo(this.container);
-		this.scroll = scroll;
+            var loader = $('<div>', {
+                                        class: 'rm-rotator_loader'
+            });
+            loader.appendTo(this.container);
+            this.loader = loader;
 
-		var loader = $('<div>', {
-									class: 'rm-rotator_loader'
-		});
-		loader.appendTo(this.container);
-		this.loader = loader;
+            this.options = $.extend({}, defaults, options);
 
-		this.options = $.extend({}, defaults, options);
-		this.defaults = defaults;
-
-		this.init();
+            this.init();
+        }
 	}
 
 	Rotator.prototype.init = function() {
 		var this_ = this;
 		this.preloader();
 		this.container.css({
-						'position': 'relative',
-						'overflow': 'hidden'
-					});
+            'position': 'relative',
+            'overflow': 'hidden'
+        });
 
 		this.scroll.css({
-					position: 'absolute',
-					left: 0,
-					top: 0,
-					'z-index': 5,
-					'-webkit-user-select': 'none',
-					'-khtml-user-select': 'none',
-					'-moz-user-select': 'none',
-					'-ms-user-select': 'none',
-					'user-select': 'none'
+			position: 'absolute',
+			left: 0,
+			top: 0,
+			'z-index': 5,
+			'-webkit-user-select': 'none',
+			'-khtml-user-select': 'none',
+			'-moz-user-select': 'none',
+			'-ms-user-select': 'none',
+			'user-select': 'none'
 		});
 
 		this.loader.css({
-					position: 'absolute',
-					backgroundColor: '#fff',
-					opacity: 0.5,
-					width: '100%',
-					height: '100%',
-					zIndex: 9,
-					textAlign: 'center',
-					paddingTop: '50%',
-					fontSize: '5em',
-					cursor: 'default',
-					'-webkit-user-select': 'none',
-					'-khtml-user-select': 'none',
-					'-moz-user-select': 'none',
-					'-ms-user-select': 'none',
-					'user-select': 'none'
-
+            position: 'absolute',
+            backgroundColor: '#fff',
+            opacity: 0.5,
+            width: '100%',
+            height: '100%',
+            zIndex: 9,
+            textAlign: 'center',
+            paddingTop: '50%',
+            fontSize: '5em',
+            cursor: 'default',
+            '-webkit-user-select': 'none',
+            '-khtml-user-select': 'none',
+            '-moz-user-select': 'none',
+            '-ms-user-select': 'none',
+            'user-select': 'none'
 		});
 
 		// Add controls
@@ -92,43 +86,38 @@
 
 		this.zoom = 1;
 		this.container.on('mousewheel DOMMouseScroll', function(e) {
-			return false;
-			if (this_.options.zoom === false) {
-				return true;
-			}
-
-			this_.options.zoom_max = this_.options.zoom_max - 0;
-			this_.options.zoom_step = this_.options.zoom_step - 0;
-
-			// Up or down?
-			var delta = e.originalEvent.wheelDelta || e.originalEvent.detail * -40;
-			if (delta > 0) {
-				this_.zoom = this_.zoom + this_.options.zoom_step;
-
-				if (this_.zoom > this_.options.zoom_max) {
-					this_.zoom = this_.options.zoom_max;
-				}
-			}
-
-			if (delta < 0) {
-				this_.zoom = this_.zoom - this_.options.zoom_step;
-
-				if (this_.zoom < 1) {
-					this_.zoom = 1;
-				}				
-			}
-
-			scale_style = {
-						  '-webkit-transform': 'scale('+this_.zoom+')',
-						     '-moz-transform': 'scale('+this_.zoom+')',
-						      '-ms-transform': 'scale('+this_.zoom+')',
-						       '-o-transform': 'scale('+this_.zoom+')',
-						          'transform': 'scale('+this_.zoom+')'
-						}
-
-			this_.scroll.find('img:eq('+this_.current+')').css(scale_style);
-
-			return false;
+//			this_.options.zoom_max = this_.options.zoom_max - 0;
+//			this_.options.zoom_step = this_.options.zoom_step - 0;
+//
+//			// Up or down?
+//			var delta = e.originalEvent.wheelDelta || e.originalEvent.detail * -40;
+//			if (delta > 0) {
+//				this_.zoom = this_.zoom + this_.options.zoom_step;
+//
+//				if (this_.zoom > this_.options.zoom_max) {
+//					this_.zoom = this_.options.zoom_max;
+//				}
+//			}
+//
+//			if (delta < 0) {
+//				this_.zoom = this_.zoom - this_.options.zoom_step;
+//
+//				if (this_.zoom < 1) {
+//					this_.zoom = 1;
+//				}
+//			}
+//
+//			var scale_style = {
+//                '-webkit-transform': 'scale('+this_.zoom+')',
+//                '-moz-transform': 'scale('+this_.zoom+')',
+//                '-ms-transform': 'scale('+this_.zoom+')',
+//                '-o-transform': 'scale('+this_.zoom+')',
+//                'transform': 'scale('+this_.zoom+')'
+//            }
+//
+//			this_.scroll.find('img:eq('+this_.current+')').css(scale_style);
+//
+//			return false;
 		});
 
 
@@ -141,7 +130,7 @@
 			return false;
 		});
 
-		$(document).on('mouseup touchend', function(e) {
+		$(document).on('mouseup touchend', function() {
 			is_move = false;
 		});
 
@@ -153,11 +142,11 @@
 		this.position = this.options.start;
 		$(document).on('mousemove touchmove', function(e) {
 			// Fix mouseup missing outside browser
-			if (e.which == 0) {
-				// is_move = false;
-			}
+//			if (e.which === 0) {
+//				is_move = false;
+//			}
 
-			var pos = this_.position
+			var pos = this_.position;
 			var speed = 0;
 			if (is_move) {
 
@@ -208,37 +197,35 @@
 
 
 	Rotator.prototype.rotate_to = function( position ) {
-		if (this.options.rotate === false) {
-			return false;
-		}
+		if (this.options.rotate !== false) {
+            if (position < 0) {
+                position = this.options.count - 1;
+            } else if (position >= this.options.count) {
+                position = 0;
+            }
 
-		if (position < 0) {
-			position = this.options.count - 1;
-		} else if (position >= this.options.count) {
-			position = 0;
-		}
+            this.position = position;
 
-		this.position = position;
+            var width = 0;
+            if (this.options.width) {
+                width = this.options.width;
+            } else {
+                width = this.first.width();
+            }
 
-		var width = 0;
-		if (this.options.width) {
-			width = this.options.width;
-		} else {
-			width = this.first.width();
-		}
+            var left = position * width;
+            left = 0 - left;
 
-		var left = position * width;
-		left = 0 - left;
-
-		this.current = position;
-		this.scroll.css('left', left+'px');
+            this.current = position;
+            this.scroll.css('left', left+'px');
+        }
 	}
 	
 	// Preload images
 	Rotator.prototype.preloader = function() {
 		var this_ = this;
 
-		var css_obj = new Object;
+		var css_obj = {};
 		css_obj.float = 'left';
 		if (this.options.width) {
 			css_obj.width = this.options.width;
@@ -269,8 +256,8 @@
 			if (i === 0) {
 				this.first = img;
 				this.first.on('load', function() {
-					this_.set_sizes();
-				});
+                    this_.set_sizes();
+                });
 			}
 
 			this.scroll.append(img);
@@ -302,7 +289,7 @@
 	// Set image and block sizes
 	Rotator.prototype.set_sizes = function() {
 		var this_ = this;
-		if (this.options.width) {	
+		if (this.options.width) {
 			images_width = this.options.count * this.options.width;
 			this.container.css('width', this.options.width);
 			this.scroll.css('width', images_width);
@@ -332,48 +319,46 @@
 			var images_width = this_.first.width() * this_.options.count;
 
 			this_.container.css({
-							width: width,
-							height: height
-				});
+                width: width,
+                height: height
+            });
 
 			this_.scroll.css({
-							width: images_width,
-							height: height
+                width: images_width,
+                height: height
 			});
 		}
 	}
 
 	Rotator.prototype.add_controls = function() {
 		var this_ = this;
-		if (!this.options || !this.options.controls) {
-			return false;
-		}
+        if (this.options && this.options.controls) {
+            for (var key in this.options.controls) {
+                if (this.options.controls[key] === 'autorotate') {
+                    var autorotate_control = $('<img>', {
+                                                        src: 'images/autorotate.png'
+                    });
 
-		for (key in this.options.controls) {
-			if (this.options.controls[key] == 'autorotate') {
-				var autorotate_control = $('<img>', {
-													src: 'images/autorotate.png'
-				});
+                    autorotate_control.css({
+                        position: 'absolute',
+                        bottom: '10px',
+                        left: '50%',
+                        zIndex: 7
+                    });
 
-				autorotate_control.css({
-										position: 'absolute',
-										bottom: '10px',
-										left: '50%',
-										zIndex: 7
-				});
+                    $(autorotate_control).appendTo(this.container);
 
-				$(autorotate_control).appendTo(this.container);
-
-				autorotate_control.on('click', function() {
-                    this_.auto_rotate.call(this_);
-				});
-			}
-		}
+                    autorotate_control.on('click', function() {
+                        this_.auto_rotate.call(this_);
+                    });
+                }
+            }
+        }
 	}
 
 	Rotator.prototype.auto_rotate = function() {
         var this_ = this;
-		delay = this.options.rotate_delay - 0;
+		var delay = this.options.rotate_delay - 0;
 		if (!this.is_rotate) {
 			this.is_rotate = setInterval(function() {
 				var position = this_.position;
