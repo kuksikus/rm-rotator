@@ -162,7 +162,7 @@
 			if (is_move) {
 
 				if (this_.is_rotate) {
-					this_.auto_rotate(this_);
+                    this_.auto_rotate.call(this_);
 				}
 
 				var x = pos;
@@ -284,7 +284,7 @@
 			this.rotate_to(this.options.start);
 
 			if (this.options.auto_rotate) {
-				this.auto_rotate(this);
+                this.auto_rotate.call(this);
 			}
 
 			// Set sizes
@@ -365,25 +365,24 @@
 				$(autorotate_control).appendTo(this.container);
 
 				autorotate_control.on('click', function() {
-					console.log('click')
-					this_.auto_rotate(this_);
+                    this_.auto_rotate.call(this_);
 				});
 			}
 		}
 	}
 
-	Rotator.prototype.auto_rotate = function(rotator) {
-		delay = rotator.options.rotate_delay - 0;
-
-		if (!rotator.is_rotate) {
-			rotator.is_rotate = setInterval(function() {
-				var position = rotator.position;
+	Rotator.prototype.auto_rotate = function() {
+        var this_ = this;
+		delay = this.options.rotate_delay - 0;
+		if (!this.is_rotate) {
+			this.is_rotate = setInterval(function() {
+				var position = this_.position;
 				position++;
-				rotator.rotate_to(position);
+				this_.rotate_to(position);
 			}, delay);
 		} else {
-			clearInterval(rotator.is_rotate);
-			rotator.is_rotate = false;
+			clearInterval(this.is_rotate);
+			this.is_rotate = false;
 		}
 	}
 	
