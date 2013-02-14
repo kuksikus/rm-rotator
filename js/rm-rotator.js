@@ -5,6 +5,8 @@
 			undefined
 		) {
 
+	'use strict';
+	
 	var defaults = {
 		// add_zeros: 'false', // Add leading zeros if filename like 01, 02, ...
 		// width: '300px',
