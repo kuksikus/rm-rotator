@@ -124,7 +124,9 @@
 
 
 		var is_move = false;
+		var first_step = false;
 		this.container.on('mousedown touchstart', function() {
+			first_step = true;
 			is_move = true;
 		});
 
@@ -143,10 +145,11 @@
 		var prev_x = 0;
 		this.position = this.options.start;
 		$(document).on('mousemove touchmove', function(e) {
-			// Fix mouseup missing outside browser
-//			if (e.which === 0) {
-//				is_move = false;
-//			}
+			// Fix mouseup bug
+			// TODO check on touches
+			if (e.which === 0 && e.type === 'mousemove') {
+				is_move = false;
+			}
 
 			var pos = this_.position;
 			var speed = 0;
@@ -164,23 +167,26 @@
 					e.preventDefault();
 				}
 
-				if (x > prev_x) {
-					speed = x - prev_x;
-					pos--;
-					if (speed > 10) {
-						pos = pos - 2;
-					}
-					if (speed > 20) {
-						pos = pos - 3;
-					}
-				} else if (x < prev_x) {
-					speed = prev_x - x;
-					pos++;
-					if (speed > 10) {
-						pos = pos + 2;
-					}
-					if (speed > 20) {
-						pos = pos + 3;
+				// If first_step - no acceleration
+				if (first_step === false) {
+					if (x > prev_x) {
+						speed = x - prev_x;
+						pos--;
+						if (speed > 10) {
+							pos = pos - 2;
+						}
+						if (speed > 20) {
+							pos = pos - 3;
+						}
+					} else if (x < prev_x) {
+						speed = prev_x - x;
+						pos++;
+						if (speed > 10) {
+							pos = pos + 2;
+						}
+						if (speed > 20) {
+							pos = pos + 3;
+						}
 					}
 				}
 
@@ -193,6 +199,7 @@
 				this_.rotate_to(pos);
 
 				prev_x = x;
+				first_step = false;
 			}
 		});
 	}
