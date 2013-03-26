@@ -23,25 +23,37 @@
 
 
 	function Rotator( element, options ) {
-		if (options.count !== undefined && options.start !== undefined && options.prefix !== undefined && options.postfix !== undefined) {
-			this.container = element;
-			this.container.empty();
-			this.loaded = 0;
-			this.current = options.start;
 
-			var scroll = $('<div>');
-			scroll.appendTo(this.container);
-			this.scroll = scroll;
+		if (options.count === undefined) {
+			var list_images = element.find('img');
+			if (list_images.length > 0) {
+				this.list_images = list_images;
+				options.count = list_images.length;
+			}
+		}
 
-			var loader = $('<div>', {
-										class: 'rm-rotator_loader'
-			});
-			loader.appendTo(this.container);
-			this.loader = loader;
+		if (options.count !== undefined && options.start !== undefined) {
 
-			this.options = $.extend({}, defaults, options);
+			if (this.list_images !== undefined || (options.prefix !== undefined && options.postfix !== undefined)) {
+				this.container = element;
+				this.container.empty();
+				this.loaded = 0;
+				this.current = options.start;
 
-			this.init();
+				var scroll = $('<div>');
+				scroll.appendTo(this.container);
+				this.scroll = scroll;
+
+				var loader = $('<div>', {
+											class: 'rm-rotator_loader'
+				});
+				loader.appendTo(this.container);
+				this.loader = loader;
+
+				this.options = $.extend({}, defaults, options);
+
+				this.init();
+			}
 		}
 	}
 
@@ -243,40 +255,55 @@
 			css_obj.height = this.options.height;
 		}
 
-		for (var i = 0; i < this.options.count; i++) {
-
-			var zi = i;
-			if (this.options.add_zeros && i < 10) {
-				zi = '0' + i;
+		// Prepare filenames
+		var filenames = [];
+		if (this.list_images === undefined) {
+			for (var i = 0; i < this.options.count; i++) {
+				var zi = i;
+				if (this.options.add_zeros && i < 10) {
+					zi = '0' + i;
+				}
+				var src = this.options.prefix + zi + this.options.postfix;
+				filenames.push(src);
 			}
-
-			var img_container = $('<div>', {
-				class: 'rm-rotator_list_images'
+		} else {
+			$.each(this.list_images, function() {
+				var src = $(this).attr('src');
+				filenames.push(src);
 			});
-			img_container.css({
-				overflow: 'hidden',
-				float: 'left'
-			});
+		}
 
-			var img = $('<img>', {
-				src: this.options.prefix + zi + this.options.postfix
-			});
-
-			img.on('load', function() {
-				this_.loaded++;
-				this_.progress();
-			});
-
-			// Get first image
-			if (i === 0) {
-				this.first = img;
-				this.first.on('load', function() {
-					this_.set_sizes();
+		if (filenames.length > 0) {
+			$.each(filenames, function(key, value) {
+				var img_container = $('<div>', {
+					class: 'rm-rotator_list_images'
 				});
-			}
 
-			img.appendTo(img_container);
-			this.scroll.append(img_container);
+				img_container.css({
+					overflow: 'hidden',
+					float: 'left'
+				});
+
+				var img = $('<img>', {
+					src: value
+				});
+
+				img.on('load', function() {
+					this_.loaded++;
+					this_.progress();
+				});
+
+				// Get first image
+				if (key === 0) {
+					this_.first = img;
+					this_.first.on('load', function() {
+						this_.set_sizes();
+					});
+				}
+
+				img.appendTo(img_container);
+				this_.scroll.append(img_container);
+			});
 		}
 	}
 

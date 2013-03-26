@@ -5,7 +5,6 @@
 * Add rotate conrol
 * Inertial rotation option
 * Canvas icons (?)
-* Images from list (?)
 
 ### Features:
 * Set sizes in options
@@ -13,3 +12,4 @@
 * Autorotate
 * Scroll to zoom
 * Progress
+* Images from list

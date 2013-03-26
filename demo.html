@@ -49,6 +49,7 @@
 	$(function() {
 		eval($('#example1_code').text());
 		eval($('#example2_code').text());
+		eval($('#example3_code').text());
 	});
 	</script>
 </head>
@@ -68,8 +69,9 @@ $(function() {
 	$('#example1').Rotator({
 		count: 60,
 		start: 10,
-		prefix: 'demo_images/violet/img_0_0_',
-		postfix: '.jpg',
+		prefix: 'demo_images/vodka/vodka_01_000',
+		postfix: '_resize.PNG',
+		add_zeros: true,
 		width: 300
 	});
 });
@@ -88,8 +90,9 @@ $(function() {
 	$('#example2').Rotator({
 		count: 60,
 		start: 0,
-		prefix: 'demo_images/violet/img_0_0_',
-		postfix: '.jpg',
+		prefix: 'demo_images/vodka/vodka_01_000',
+		postfix: '_resize.PNG',
+		add_zeros: true,
 		height: 300,
 		auto_rotate: true,
 		controls: ['autorotate']
@@ -100,6 +103,7 @@ $(function() {
 <div id="example2" class="demo_rotator"></div>
 
 <div class="clear"></div>
+
 
 <h3>All options</h3>
 <table class="table">
