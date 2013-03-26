@@ -32,7 +32,11 @@
 			}
 		}
 
-		if (options.count !== undefined && options.start !== undefined) {
+		if (options.start === undefined) {
+			options.start = 1;
+		}
+
+		if (options.count !== undefined) {
 
 			if (this.list_images !== undefined || (options.prefix !== undefined && options.postfix !== undefined)) {
 				this.container = element;
